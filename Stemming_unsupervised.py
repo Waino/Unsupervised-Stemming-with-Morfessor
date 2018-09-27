@@ -7,6 +7,10 @@ import sys
 import morfessor
 import flatcat
 
+corpusweight = float(sys.argv[1])
+input_dir = sys.argv[2]
+output_dir = sys.argv[3]
+
 def filetowordlist(path, sfx, output, output_freq):
     filedict = {}
     allwordlist = []
@@ -36,12 +40,12 @@ def filetowordlist(path, sfx, output, output_freq):
     return filedict, allwordlist
 
 print('loading and preprocessing data ...')
-files, allwordlist = filetowordlist(sys.argv[1], '.txt', 'TempOut.txt', 'Freq.txt')
+files, allwordlist = filetowordlist(input_dir, '.txt', 'TempOut.txt', 'Freq.txt')
 
-def Base_SegModel(data):
+def Base_SegModel(data, corpusweight):
     io = morfessor.MorfessorIO()
     train_data = list(io.read_corpus_file(data))
-    model_types = morfessor.BaselineModel()
+    model_types = morfessor.BaselineModel(corpusweight=corpusweight)
     model_types.load_data(train_data, count_modifier=lambda x: 1)
     model_types.train_batch()
     model_tokens = morfessor.BaselineModel()
@@ -50,8 +54,9 @@ def Base_SegModel(data):
 
     return model_types, model_tokens
 
+print('using corpus weight {}'.format(corpusweight))
 print('training the baseline ...')
-segmentation_types, segmentation_tokens = Base_SegModel('TempOut.txt')
+segmentation_types, segmentation_tokens = Base_SegModel('TempOut.txt', corpusweight)
 
 def Base_Segmentation(segmodel, fl, output):
     f = codecs.open(fl, 'r', encoding='utf-8')
@@ -76,9 +81,10 @@ print('training the stemming model ...')
 def ModelTraining(segmentation_file):
     io = flatcat.FlatcatIO()
     morph_usage = flatcat.categorizationscheme.MorphUsageProperties()
-    model = flatcat.FlatcatModel(morph_usage, corpusweight=1.0)
+    model = flatcat.FlatcatModel(morph_usage, corpusweight=corpusweight)
     model.add_corpus_data(io.read_segmentation_file(segmentation_file))
     model.initialize_hmm()
+    model.train_batch()
     return model
 
 model = ModelTraining('Seg_output.txt')
@@ -99,5 +105,5 @@ def Segment(files, model, output_path):
         segdict[file] = seglist
     return segdict
 
-sg = Segment(files, model, sys.argv[2])
+sg = Segment(files, model, output_dir)
 print('Finished!')

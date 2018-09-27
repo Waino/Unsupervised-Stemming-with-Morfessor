@@ -9,5 +9,5 @@ This stemmer uses Morfessor 2.0 (Virpioja,et al. 2013) and Morfessor FlatCat 1.0
 Before running the code, please install Morfessor 2.0 (http://morfessor.readthedocs.io/en/latest/installation.html) and Morfessor FlatCat 1.0.5 (http://morfessor-flatcat.readthedocs.io/en/latest/installation.html#installation-instructions).
 
 ## Running Example
-`$ python Stemming_unsupervised.py raw/en/ segmented/en/`
+`$ python Stemming_unsupervised.py 1.0 raw/en/ segmented/en/`
 
