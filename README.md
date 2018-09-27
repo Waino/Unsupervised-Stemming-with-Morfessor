@@ -12,10 +12,12 @@ Before running the code, please install Morfessor 2.0 (http://morfessor.readthed
 ## Unsupervised Example
 Here we set the corpus weight parameter to 1.0. 
 The optimal value depends on the data set.
+
 `$ python Stemming_unsupervised.py 1.0 raw/en/ segmented/en/`
 
 ## Auto-tuning Example
 Here we use auto-tuning of the corpus weight parameter.
 The tuning parameter is the average length of morphs (all morphs including affixes, not just stems).
 In the example we set this to 3.5 characters.
+
 `$ python Stemming_autotune.py 3.5 raw/en/ segmented/en/`
