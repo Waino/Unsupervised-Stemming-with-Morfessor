@@ -18,4 +18,4 @@ The optimal value depends on the data set.
 Here we use auto-tuning of the corpus weight parameter.
 The tuning parameter is the average length of morphs (all morphs including affixes, not just stems).
 In the example we set this to 3.5 characters.
-python Stemming_autotune.py 3.5 raw/en/ segmented/en/
+`$ python Stemming_autotune.py 3.5 raw/en/ segmented/en/`
